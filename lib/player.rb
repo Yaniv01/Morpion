@@ -4,11 +4,9 @@ class Player
 
  attr_accessor :name , :symbol
 
-	def initialize(name)
-		puts "Quel est ton nom ?"
-		print '>'
+	def initialize(name,symbol)
 
-		@name = gets.chomp
+		@name = name
 		@symbol = symbol
 
 	end  #fin initialize

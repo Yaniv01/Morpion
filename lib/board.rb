@@ -1,5 +1,6 @@
 require 'pry'
-require_relative 'BoardCase.rb'
+require_relative 'BoardCase'
+require_relative 'Show'
 
 class Board
 	attr_accessor :array_cases , :turn_counter, :game_win
@@ -15,157 +16,96 @@ class Board
 		@C2 = BoardCase.new("C2")
 		@C3 = BoardCase.new("C3")
 	
-		@array_cases = [@A1 ,@A2 ,@A3 ,@B1 ,@B2 ,@B3 ,@C1 ,@C2 ,@C3]
+		@array_cases = [@A1.value ,@A2.value ,@A3.value ,@B1.value ,@B2.value ,@B3.value ,@C1.value ,@C2.value ,@C3.value]
 		@turn_counter = 0
-		@game_win = false
+		
 
 	end
 	
 
-	def board_representation
-	  puts "Voici le tableau :"
-		puts "	  1   2   3    "   
-		puts " 	A|#{array_cases[0].value} | #{array_cases[1].value} | #{array_cases[2].value} |"
-		puts "	-------------"
-		puts " 	B|#{array_cases[3].value} | #{array_cases[4].value} | #{array_cases[5].value} |"
-		puts "	-------------"
-		puts "	C|#{array_cases[6].value} | #{array_cases[7].value} | #{array_cases[8].value} |"
-		puts "    	-------------"
 
+	def play_turn(player, board)
+        @count_turn = 0
+        i = rand(0..1)
+        while  @count_turn != 9
+            
+            Show.new.show_board(board)
+            puts "À toi de jouer #{player[i].name} :"
+            choice = gets.chomp
+            if choice == "A1" && board.array_cases[0] == " "
+                board.array_cases[0] = player[i].symbol
+            elsif choice == "A2" && board.array_cases[1] == " "
+                board.array_cases[1] = player[i].symbol    
+            elsif choice == "A3" && board.array_cases[2] == " "
+                board.array_cases[2] = player[i].symbol    
+            elsif choice == "B1" && board.array_cases[3] == " "
+                board.array_cases[3] = player[i].symbol    
+            elsif choice == "B2" && board.array_cases[4] == " "
+                board.array_cases[4] = player[i].symbol    
+            elsif choice == "B3" && board.array_cases[5] == " "
+                board.array_cases[5] = player[i].symbol    
+            elsif choice == "C1" && board.array_cases[6] == " "
 
-	end
+                board.array_cases[6] = player[i].symbol    
+            elsif choice == "C2" && board.array_cases[7] == " "
+                board.array_cases[7] = player[i].symbol    
+            elsif choice == "C3" && board.array_cases[8] == " "
+                board.array_cases[8] = player[i].symbol    
+            else
+                puts "Vous ne pouvez pas jouer sur cette case."
+                i = (i - 1) % 2			
 
-	def play_turn(player)
-		if player == current_player
-			player.symbol = "X"
-		else
-			player.symbol ="O"
-		end
-
-		puts "#{current_player.name} , que souhaite tu jouer ?"
-		input = gets.chomp
-
-		loop do
-			case input
-
-			when "A1"
-			if array_cases[0].value !=" "
-				puts " "
-				puts "Tu ne peux pas choisir cette case, choisis en une autre"
-				print '>'
-				input = gets.chomp
-
-			else
-				array_cases[0].value = player.symbol
-				break
-			end
-
-			when "A2"
-			  if array_cases[1].value !=" "
-					puts ""                              
-					puts "Tu ne peux pas choisir cette case, choisis en une autre"
-					print '>'
-					input = gets.chomp																								
-				else							                                
-					array_cases[1].value = player.symbol
-				break
-				ii
-
-
-			end
-			
-			when "A3"
-				if array_cases[2].value !=" "
-					puts " "
-					puts "Tu ne peux pas choisir cette case, choisis en une autre"
-					print '>'
-					input = gets.chomp
-				else
-					array_cases[2].value = player.symbol
-				break
-			end
-			when "B1"
-				if array_cases[3].value !=" "
-					puts " "
-					puts "Tu ne peux pas choisir cette case, choisis en une autre"
-					print '>'
-					input = gets.chomp
-				else
-					array_cases[3].value = player.symbol  
-					break
-				end
-
-			 when "B2"     
-			 	if array_cases[4].value !=" "
-			 		puts " "                              
-					puts "Tu ne peux pas choisir cette case, choisis en une autre"  
-					print '>'               
-					input = gets.chomp
-				else
-					array_cases[4].value = player.symbol                              
-					break                                                                
-					end 
-					
-					when "B3"
-						if array_cases[5].value != " "
-							puts " "
-							puts "Tu ne peux pas choisir cette case, choisis en une autre"
-							print '>'
-							input =gets.chomp
-						else
-						array_cases[5] = player.symbol
-						break
 						end
+		
+						if "o" == board.victory?()
+             if "o" == player[1].symbol
+               puts "le joueur #{player[1]} a gagné !"
+            return
+            elsif "o" == player[0].symbol
+             puts "le joueur #{player[0]} a gagné !"
+            return
+             end
+            end
 
-						when "C1" 
-							if array_cases[6].value != " "
-								puts " "
-								puts "Tu ne peux pas choisir cette case, choisis en une autre"
-								print '>'
-								input = gets.chomp
-							else
-								array_cases[6].value = player.symbol
-							 break
-							end
-							when "C2"
-								if array_cases[7].value != " "
-									puts " "
-									puts "Tu ne peux pas choisir cette case, choisis en une autre"
-									print '>'
-									input = gets.chomp
-								else 
-									array_cases[7].value = player.symbol
-							 	 break
-							end
-							when "C3"
-								if array_cases[8].value != " " 
-									puts " "
-									puts "Tu ne peux pas choisir cette ca	se choisis en une autre"
-									print '>'
-									input = gets.chomp
-								else
-									array_cases[8].value =player.symbol
-								 break
-								end
+        @count_turn += 1
+        i = (i + 1) % 2
+        end
+        	puts "Match nul ..."
+        return
+    end
 
-						else 
-							puts " "
-							puts "    La case que tu as entrée n'est pas valide essaie avec les majuscules"
-							print ">"
-							input= gets.chomp
-						end
-
-
-
-					
-
-		end
+		 def victory?
+        if (@A1.value == "o" && @A2.value == "o" && @A3.value == "o") || (@A1.value == "x" && @A2.value == "x" && @A3.value == "x")
+            return @A1.value
+        elsif (@A1.value == "o" && @A2.value == "o" && @A3.value == "o") || (@A1.value == "x" && @A2.value == "x" && @A3.value == "x")
+            return @A1.value
+        elsif (@A1.value == "o" && @A2.value == "o" && @A3.value == "o") || (@A1.value == "x" && @A2.value == "x" && @A3.value == "x")
+            return @A1.value
+        elsif (@B1.value == "o" && @B2.value == "o" && @B3.value == "o") || (@B1.value == "x" && @B2.value == "x" && @B3.value == "x")
+            return @B1.value
+        elsif (@B1.value == "o" && @B2.value == "o" && @B3.value == "o") || (@B1.value == "x" && @B2.value == "x" && @B3.value == "x")
+            return @B1.value
+        elsif (@B1.value == "o" && @B2.value == "o" && @B3.value == "o") || (@B1.value == "x" && @B2.value == "x" && @B3.value == "x")
+            return @A1.value
+        elsif (@C1.value == "o" && @C2.value == "o" && @C3.value == "o") || (@C1.value == "x" && @C2.value == "x" && @C3.value == "x")
+            return @A1.value
+        elsif (@C1.value == "o" && @C2.value == "o" && @C3.value == "o") || (@C1.value == "x" && @C2.value == "x" && @C3.value == "x")
+            return @A1.value
+        elsif (@C1.value == "o" && @C2.value == "o" && @C3.value == "o") || (@C1.value == "x" && @C2.value == "x" && @C3.value == "x")
+            return @A1.value
+        elsif (@A1.value == "o" && @B2.value == "o" && @C3.value == "o") || (@A1.value == "x" && @B2.value == "x" && @C3.value == "x")
+            return @A1.value
+        elsif (@C1.value == "o" && @B2.value == "o" && @A3.value == "o") || (@C1.value == "x" && @B2.value == "x" && @A3.value == "x")
+            return @A1.value
+        else @count_turn == 9 
+            @game_win = false
+        end
 		
 
 	end
 end
 
 
-Board.new.board_representation
-end
+
+
 
